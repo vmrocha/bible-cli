@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/vmrocha/bible-terminal/internal/bible"
+	"github.com/vmrocha/bible-cli/internal/bible"
 )
 
 // Entry combines canonical book metadata with accepted CLI aliases.

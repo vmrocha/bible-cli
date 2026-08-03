@@ -6,8 +6,8 @@ import (
 	"io"
 
 	"github.com/spf13/cobra"
-	"github.com/vmrocha/bible-terminal/internal/bible"
-	"github.com/vmrocha/bible-terminal/internal/render"
+	"github.com/vmrocha/bible-cli/internal/bible"
+	"github.com/vmrocha/bible-cli/internal/render"
 )
 
 // TranslationReader lists bundled translation metadata.

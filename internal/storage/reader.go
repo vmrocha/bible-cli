@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/vmrocha/bible-terminal/internal/bible"
-	"github.com/vmrocha/bible-terminal/internal/reference"
+	"github.com/vmrocha/bible-cli/internal/bible"
+	"github.com/vmrocha/bible-cli/internal/reference"
 )
 
 //go:embed engwebp.db

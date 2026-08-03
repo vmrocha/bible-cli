@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/vmrocha/bible-terminal/internal/buildinfo"
+	"github.com/vmrocha/bible-cli/internal/buildinfo"
 )
 
 func newVersionCommand(info buildinfo.Info) *cobra.Command {

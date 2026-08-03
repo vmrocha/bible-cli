@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/vmrocha/bible-terminal/internal/canon"
+	"github.com/vmrocha/bible-cli/internal/canon"
 )
 
 // Books writes the accepted book names, source codes, and aliases.

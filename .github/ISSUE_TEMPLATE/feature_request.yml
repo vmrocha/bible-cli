@@ -1,5 +1,5 @@
 name: Feature request
-description: Propose an improvement to Bible Terminal
+description: Propose an improvement to Bible CLI
 title: "[Feature]: "
 labels:
   - enhancement
@@ -50,5 +50,5 @@ body:
     attributes:
       label: Code of Conduct
       options:
-        - label: I agree to follow the [Code of Conduct](https://github.com/vmrocha/bible-terminal/blob/main/CODE_OF_CONDUCT.md).
+        - label: I agree to follow the [Code of Conduct](https://github.com/vmrocha/bible-cli/blob/main/CODE_OF_CONDUCT.md).
           required: true

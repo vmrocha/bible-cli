@@ -9,8 +9,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/vmrocha/bible-terminal/internal/bible"
-	"github.com/vmrocha/bible-terminal/internal/translation"
+	"github.com/vmrocha/bible-cli/internal/bible"
+	"github.com/vmrocha/bible-cli/internal/translation"
 )
 
 // LoadArchive verifies a source ZIP and parses the manifest-selected VPL member.

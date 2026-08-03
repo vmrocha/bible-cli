@@ -1,4 +1,4 @@
-# Installing Bible Terminal
+# Installing Bible CLI
 
 ## Release archives
 
@@ -10,17 +10,17 @@ Tagged releases provide single-binary archives for:
 - Linux on ARM64 (`linux_arm64`)
 
 Download the archive for your platform and `checksums.txt` from the matching
-[GitHub release](https://github.com/vmrocha/bible-terminal/releases). For
+[GitHub release](https://github.com/vmrocha/bible-cli/releases). For
 example, once the repository is public, download version `0.1.0` for an Apple
 silicon Mac without a GitHub account or GitHub CLI:
 
 ```console
 curl --fail --location --remote-name \
-  https://github.com/vmrocha/bible-terminal/releases/download/v0.1.0/bible-terminal_0.1.0_darwin_arm64.tar.gz
+  https://github.com/vmrocha/bible-cli/releases/download/v0.1.0/bible-cli_0.1.0_darwin_arm64.tar.gz
 curl --fail --location --remote-name \
-  https://github.com/vmrocha/bible-terminal/releases/download/v0.1.0/checksums.txt
-grep 'bible-terminal_0.1.0_darwin_arm64.tar.gz$' checksums.txt | shasum -a 256 -c -
-tar -xzf bible-terminal_0.1.0_darwin_arm64.tar.gz
+  https://github.com/vmrocha/bible-cli/releases/download/v0.1.0/checksums.txt
+grep 'bible-cli_0.1.0_darwin_arm64.tar.gz$' checksums.txt | shasum -a 256 -c -
+tar -xzf bible-cli_0.1.0_darwin_arm64.tar.gz
 install -d ~/.local/bin
 install -m 0755 bible ~/.local/bin/bible
 ```
@@ -41,7 +41,7 @@ download, account, API key, or network connection is needed after installation.
 
 ## Shell completion
 
-Bible Terminal generates completion scripts without requiring additional files.
+Bible CLI generates completion scripts without requiring additional files.
 
 ### Bash
 
@@ -74,8 +74,8 @@ PowerShell completion is also available through `bible completion powershell`.
 Building from source requires Go 1.26 or newer and Make:
 
 ```console
-git clone https://github.com/vmrocha/bible-terminal.git
-cd bible-terminal
+git clone https://github.com/vmrocha/bible-cli.git
+cd bible-cli
 make check
 install -d ~/.local/bin
 install -m 0755 bin/bible ~/.local/bin/bible

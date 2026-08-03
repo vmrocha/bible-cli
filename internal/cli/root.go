@@ -5,7 +5,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 	"github.com/spf13/cobra"
-	"github.com/vmrocha/bible-terminal/internal/buildinfo"
+	"github.com/vmrocha/bible-cli/internal/buildinfo"
 )
 
 type outputSettings struct {

@@ -2,11 +2,11 @@
 
 - Status: Accepted
 - Date: 2026-07-15
-- Decision owners: Bible Terminal maintainers
+- Decision owners: Bible CLI maintainers
 
 ## Context
 
-Bible Terminal needs a translation that can be embedded in release binaries,
+Bible CLI needs a translation that can be embedded in release binaries,
 read offline, searched, and redistributed without requiring an account or a
 commercial agreement. The first importer also needs a stable, structured,
 publisher-provided source.
@@ -26,7 +26,7 @@ The importer will consume `engwebp_vpl.txt` from eBible.org's official
 verse-per-line archive. That distribution intentionally contains Bible text
 only and omits formatting, paragraph breaks, notes, introductions, and section
 titles. Using the publisher's text-only export avoids treating those omissions
-as transformations made by Bible Terminal.
+as transformations made by Bible CLI.
 
 Every imported snapshot must be pinned by an archive SHA-256 checksum and
 validated against the expected book and verse totals in its manifest. The
@@ -37,7 +37,7 @@ not permission to silently accept future content at the mutable download URL.
 
 The publisher states that the World English Bible text is in the public domain
 and may be copied and redistributed. The name "World English Bible" is a
-trademark and may be used to identify faithful copies. If Bible Terminal changes
+trademark and may be used to identify faithful copies. If Bible CLI changes
 the translation text or punctuation, the changed work must not be presented as
 the World English Bible.
 

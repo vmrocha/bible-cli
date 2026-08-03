@@ -1,12 +1,12 @@
 # Third-Party Notices
 
-Bible Terminal's source code is licensed under the MIT License. The bundled
+Bible CLI's source code is licensed under the MIT License. The bundled
 Bible text described below is a separate work and is not licensed under the
 project's MIT License.
 
 ## World English Bible — Protestant Edition
 
-Bible Terminal bundles the World English Bible, Protestant Edition:
+Bible CLI bundles the World English Bible, Protestant Edition:
 
 - Application and source identifier: `engwebp`
 - Abbreviation: `WEBP`
@@ -20,7 +20,7 @@ eBible.org identifies the World English Bible text as public domain. The name
 faithful copies of the translation. If the actual translation text is changed,
 the resulting work must not be identified as the World English Bible.
 
-Bible Terminal preserves the publisher-provided verse text after UTF-8 decoding
+Bible CLI preserves the publisher-provided verse text after UTF-8 decoding
 and removal of the source record separator. Reference identifiers, storage
 metadata, terminal styling, and display wrapping are handled separately.
 

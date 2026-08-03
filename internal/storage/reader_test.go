@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/vmrocha/bible-terminal/internal/canon"
-	"github.com/vmrocha/bible-terminal/internal/reference"
+	"github.com/vmrocha/bible-cli/internal/canon"
+	"github.com/vmrocha/bible-cli/internal/reference"
 )
 
 func TestEmbeddedDatabase(t *testing.T) {

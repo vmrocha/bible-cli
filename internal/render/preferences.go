@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/vmrocha/bible-terminal/internal/config"
+	"github.com/vmrocha/bible-cli/internal/config"
 )
 
 // Preferences writes the effective persistent configuration.

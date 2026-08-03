@@ -9,8 +9,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/vmrocha/bible-terminal/internal/bible"
-	"github.com/vmrocha/bible-terminal/internal/translation"
+	"github.com/vmrocha/bible-cli/internal/bible"
+	"github.com/vmrocha/bible-cli/internal/translation"
 	_ "modernc.org/sqlite"
 )
 
@@ -42,7 +42,7 @@ func Generate(ctx context.Context, outputPath string, manifest translation.Manif
 	if err := os.MkdirAll(directory, 0o755); err != nil {
 		return fmt.Errorf("create output directory: %w", err)
 	}
-	temporary, err := os.CreateTemp(directory, ".bible-terminal-*.db")
+	temporary, err := os.CreateTemp(directory, ".bible-cli-*.db")
 	if err != nil {
 		return fmt.Errorf("create temporary database: %w", err)
 	}

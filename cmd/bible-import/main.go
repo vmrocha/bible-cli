@@ -6,9 +6,9 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/vmrocha/bible-terminal/internal/importer"
-	"github.com/vmrocha/bible-terminal/internal/storage"
-	"github.com/vmrocha/bible-terminal/internal/translation"
+	"github.com/vmrocha/bible-cli/internal/importer"
+	"github.com/vmrocha/bible-cli/internal/storage"
+	"github.com/vmrocha/bible-cli/internal/translation"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func newCommand() *cobra.Command {
 
 	command := &cobra.Command{
 		Use:           "bible-import",
-		Short:         "Build a Bible Terminal translation database",
+		Short:         "Build a Bible CLI translation database",
 		SilenceErrors: true,
 		SilenceUsage:  true,
 		Args:          cobra.NoArgs,

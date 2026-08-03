@@ -33,11 +33,11 @@ fi
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 mkdir -p "$output"
 output=$(cd "$output" && pwd)
-if compgen -G "$output/bible-terminal_*.tar.gz" >/dev/null || [[ -e $output/checksums.txt ]]; then
+if compgen -G "$output/bible-cli_*.tar.gz" >/dev/null || [[ -e $output/checksums.txt ]]; then
   echo "output directory already contains release artifacts: $output" >&2
   exit 2
 fi
-work=$(mktemp -d "${TMPDIR:-/tmp}/bible-terminal-release.XXXXXX")
+work=$(mktemp -d "${TMPDIR:-/tmp}/bible-cli-release.XXXXXX")
 trap 'rm -rf "$work"' EXIT
 
 export CGO_ENABLED=0
@@ -54,16 +54,16 @@ targets=(
 for target in "${targets[@]}"; do
   goos=${target%/*}
   goarch=${target#*/}
-  name="bible-terminal_${version#v}_${goos}_${goarch}"
+  name="bible-cli_${version#v}_${goos}_${goarch}"
   stage="$work/$name"
   mkdir -p "$stage"
 
   GOOS=$goos GOARCH=$goarch go build \
     -trimpath \
     -ldflags "-s -w \
-      -X github.com/vmrocha/bible-terminal/internal/buildinfo.version=$version \
-      -X github.com/vmrocha/bible-terminal/internal/buildinfo.commit=$commit \
-      -X github.com/vmrocha/bible-terminal/internal/buildinfo.date=$build_date" \
+      -X github.com/vmrocha/bible-cli/internal/buildinfo.version=$version \
+      -X github.com/vmrocha/bible-cli/internal/buildinfo.commit=$commit \
+      -X github.com/vmrocha/bible-cli/internal/buildinfo.date=$build_date" \
     -o "$stage/bible" \
     ./cmd/bible
 
@@ -83,5 +83,5 @@ done
 
 (
   cd "$output"
-  sha256sum bible-terminal_*.tar.gz >checksums.txt
+  sha256sum bible-cli_*.tar.gz >checksums.txt
 )
