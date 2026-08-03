@@ -3,6 +3,10 @@
 /dist/
 *.out
 
+# Website dependencies and generated site
+/website/node_modules/
+/website/.vitepress/dist/
+
 # Test and coverage outputs
 coverage.txt
 coverage.html
