@@ -1,8 +1,8 @@
 package importer
 
 import (
-	"github.com/vmrocha/bible-terminal/internal/bible"
-	"github.com/vmrocha/bible-terminal/internal/canon"
+	"github.com/vmrocha/bible-cli/internal/bible"
+	"github.com/vmrocha/bible-cli/internal/canon"
 )
 
 var protestantBooks = func() []bible.Book {

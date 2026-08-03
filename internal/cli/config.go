@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/vmrocha/bible-terminal/internal/config"
-	"github.com/vmrocha/bible-terminal/internal/render"
+	"github.com/vmrocha/bible-cli/internal/config"
+	"github.com/vmrocha/bible-cli/internal/render"
 )
 
 // PreferenceStore persists CLI defaults.

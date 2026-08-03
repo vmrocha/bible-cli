@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/vmrocha/bible-terminal/internal/translation"
+	"github.com/vmrocha/bible-cli/internal/translation"
 )
 
 func TestLoadArchive(t *testing.T) {

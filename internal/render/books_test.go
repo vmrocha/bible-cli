@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/vmrocha/bible-terminal/internal/canon"
+	"github.com/vmrocha/bible-cli/internal/canon"
 )
 
 func TestBooks(t *testing.T) {

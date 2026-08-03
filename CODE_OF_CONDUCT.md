@@ -2,7 +2,7 @@
 
 ## Our commitment
 
-Bible Terminal is committed to a welcoming, respectful, and harassment-free
+Bible CLI is committed to a welcoming, respectful, and harassment-free
 community for everyone, regardless of experience, identity, background, or
 belief. Participation in this project is a privilege that depends on treating
 other people with dignity.
@@ -40,7 +40,7 @@ of the project.
 
 Do not report conduct incidents in a public issue. Email
 [vmrocha@gmail.com](mailto:vmrocha@gmail.com) with the subject
-`[bible-terminal conduct]` and include relevant links, context, and any desired
+`[bible-cli conduct]` and include relevant links, context, and any desired
 resolution. Reports will be handled as confidentially as reasonably possible.
 
 The maintainer will review reports fairly, avoid conflicts of interest, and

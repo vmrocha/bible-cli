@@ -25,12 +25,12 @@ func TestResolvePath(t *testing.T) {
 			name:     "XDG home is shared across macOS and Linux",
 			xdgHome:  filepath.Join(string(filepath.Separator), "xdg"),
 			userHome: filepath.Join(string(filepath.Separator), "home", "reader"),
-			want:     filepath.Join(string(filepath.Separator), "xdg", "bible-terminal", "config.json"),
+			want:     filepath.Join(string(filepath.Separator), "xdg", "bible-cli", "config.json"),
 		},
 		{
 			name:     "home fallback uses dot config",
 			userHome: filepath.Join(string(filepath.Separator), "home", "reader"),
-			want:     filepath.Join(string(filepath.Separator), "home", "reader", ".config", "bible-terminal", "config.json"),
+			want:     filepath.Join(string(filepath.Separator), "home", "reader", ".config", "bible-cli", "config.json"),
 		},
 	}
 
@@ -55,7 +55,7 @@ func TestResolvePathRejectsRelativeLocations(t *testing.T) {
 		userHome   string
 		want       string
 	}{
-		{"config override", "relative", "", "/home/reader", "BIBLE_TERMINAL_CONFIG_HOME"},
+		{"config override", "relative", "", "/home/reader", "BIBLE_CLI_CONFIG_HOME"},
 		{"XDG override", "", "relative", "/home/reader", "XDG_CONFIG_HOME"},
 		{"user home", "", "", "relative", "user home"},
 	} {

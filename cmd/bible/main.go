@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/vmrocha/bible-terminal/internal/buildinfo"
-	"github.com/vmrocha/bible-terminal/internal/cli"
-	"github.com/vmrocha/bible-terminal/internal/config"
-	"github.com/vmrocha/bible-terminal/internal/storage"
+	"github.com/vmrocha/bible-cli/internal/buildinfo"
+	"github.com/vmrocha/bible-cli/internal/cli"
+	"github.com/vmrocha/bible-cli/internal/config"
+	"github.com/vmrocha/bible-cli/internal/storage"
 )
 
 func main() {

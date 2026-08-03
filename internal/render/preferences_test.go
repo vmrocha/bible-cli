@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/vmrocha/bible-terminal/internal/config"
+	"github.com/vmrocha/bible-cli/internal/config"
 )
 
 func TestPreferences(t *testing.T) {

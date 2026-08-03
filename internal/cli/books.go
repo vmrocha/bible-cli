@@ -4,8 +4,8 @@ import (
 	"io"
 
 	"github.com/spf13/cobra"
-	"github.com/vmrocha/bible-terminal/internal/canon"
-	"github.com/vmrocha/bible-terminal/internal/render"
+	"github.com/vmrocha/bible-cli/internal/canon"
+	"github.com/vmrocha/bible-cli/internal/render"
 )
 
 func newBooksCommand(settings *outputSettings, isTerminal func(io.Writer) bool) *cobra.Command {

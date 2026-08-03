@@ -22,7 +22,7 @@ case "$(uname -s)/$(uname -m)" in
     ;;
 esac
 
-archive="bible-terminal_${version#v}_${target}.tar.gz"
+archive="bible-cli_${version#v}_${target}.tar.gz"
 archive_path="$archive_directory/$archive"
 checksums_path="$archive_directory/checksums.txt"
 if [[ ! -f $archive_path || ! -f $checksums_path ]]; then
@@ -47,7 +47,7 @@ fi
 
 temp_root=${TMPDIR:-/tmp}
 temp_root=${temp_root%/}
-work=$(mktemp -d "$temp_root/bible-terminal-smoke.XXXXXX")
+work=$(mktemp -d "$temp_root/bible-cli-smoke.XXXXXX")
 trap 'rm -rf "$work"' EXIT
 tar -xzf "$archive_path" -C "$work"
 bible="$work/bible"
@@ -63,23 +63,23 @@ version_output=$("$bible" version)
 grep -F "bible $version" <<<"$version_output"
 grep -F "commit: $commit" <<<"$version_output"
 
-config_path=$(BIBLE_TERMINAL_CONFIG_HOME="$config_home" "$bible" config path)
+config_path=$(BIBLE_CLI_CONFIG_HOME="$config_home" "$bible" config path)
 test "$config_path" = "$config_home/config.json"
-BIBLE_TERMINAL_CONFIG_HOME="$config_home" "$bible" config set plain true
-BIBLE_TERMINAL_CONFIG_HOME="$config_home" "$bible" config set color false
-BIBLE_TERMINAL_CONFIG_HOME="$config_home" "$bible" --plain config show |
+BIBLE_CLI_CONFIG_HOME="$config_home" "$bible" config set plain true
+BIBLE_CLI_CONFIG_HOME="$config_home" "$bible" config set color false
+BIBLE_CLI_CONFIG_HOME="$config_home" "$bible" --plain config show |
   grep -F $'translation\tengwebp'
-BIBLE_TERMINAL_CONFIG_HOME="$config_home" "$bible" --plain config show |
+BIBLE_CLI_CONFIG_HOME="$config_home" "$bible" --plain config show |
   grep -F $'plain\ttrue'
-BIBLE_TERMINAL_CONFIG_HOME="$config_home" "$bible" --plain config show |
+BIBLE_CLI_CONFIG_HOME="$config_home" "$bible" --plain config show |
   grep -F $'color\tfalse'
 
-BIBLE_TERMINAL_CONFIG_HOME="$config_home" "$bible" read "John 3:16" |
+BIBLE_CLI_CONFIG_HOME="$config_home" "$bible" read "John 3:16" |
   grep -F "For God so loved the world"
-BIBLE_TERMINAL_CONFIG_HOME="$config_home" "$bible" search "God loved world" --limit 1 |
+BIBLE_CLI_CONFIG_HOME="$config_home" "$bible" search "God loved world" --limit 1 |
   grep -F "John 3:16"
-BIBLE_TERMINAL_CONFIG_HOME="$config_home" "$bible" completion bash |
+BIBLE_CLI_CONFIG_HOME="$config_home" "$bible" completion bash |
   grep -F "__start_bible"
 
-BIBLE_TERMINAL_CONFIG_HOME="$config_home" "$bible" config reset
+BIBLE_CLI_CONFIG_HOME="$config_home" "$bible" config reset
 test ! -e "$config_home/config.json"

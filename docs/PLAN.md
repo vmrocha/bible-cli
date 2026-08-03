@@ -1,8 +1,8 @@
-# Bible Terminal execution plan
+# Bible CLI execution plan
 
 ## 1. Vision
 
-Bible Terminal should make opening, navigating, and searching Scripture from a
+Bible CLI should make opening, navigating, and searching Scripture from a
 terminal as direct as opening a local text file. Reading must work offline, and
 the CLI must compose naturally with standard shell tools.
 

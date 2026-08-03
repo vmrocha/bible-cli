@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Bible Terminal is under active development. Security fixes are provided for
+Bible CLI is under active development. Security fixes are provided for
 the latest published release and the current `main` branch. Older releases are
 not supported; users should upgrade to the latest release before reporting a
 problem that may already be fixed.
@@ -15,11 +15,11 @@ security vulnerability.
 After private vulnerability reporting is enabled for this public repository,
 use GitHub's **Report a vulnerability** form:
 
-https://github.com/vmrocha/bible-terminal/security/advisories/new
+https://github.com/vmrocha/bible-cli/security/advisories/new
 
 Until that form is available, or if it does not work, email
 [vmrocha@gmail.com](mailto:vmrocha@gmail.com) with the subject
-`[bible-terminal security]`.
+`[bible-cli security]`.
 
 Include as much of the following as possible:
 
