@@ -1,4 +1,4 @@
-# Bible Terminal
+# Bible CLI
 
 An offline-first command-line application for reading and searching the Bible
 without leaving the terminal.
@@ -88,12 +88,12 @@ public-domain rights notice, trademark notice, and publisher text policy.
 
 ## Configuration
 
-Bible Terminal uses the same configuration convention on macOS and Linux. The
+Bible CLI uses the same configuration convention on macOS and Linux. The
 path is resolved in this order:
 
-1. `$BIBLE_TERMINAL_CONFIG_HOME/config.json`
-2. `$XDG_CONFIG_HOME/bible-terminal/config.json`
-3. `~/.config/bible-terminal/config.json`
+1. `$BIBLE_CLI_CONFIG_HOME/config.json`
+2. `$XDG_CONFIG_HOME/bible-cli/config.json`
+3. `~/.config/bible-cli/config.json`
 
 The first two environment variables must contain absolute paths. Inspect and
 change preferences with the CLI instead of editing JSON directly:
@@ -150,7 +150,7 @@ completion setup.
 
 ## License
 
-Bible Terminal's source code is licensed under the [MIT License](LICENSE).
+Bible CLI's source code is licensed under the [MIT License](LICENSE).
 Bible translations are separate works with their own copyright and
 redistribution terms; no translation should be bundled until its license and
 required attribution have been verified and documented. See

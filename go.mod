@@ -1,4 +1,4 @@
-module github.com/vmrocha/bible-terminal
+module github.com/vmrocha/bible-cli
 
 go 1.26
 

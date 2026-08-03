@@ -47,8 +47,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            dist/bible-terminal_*.tar.gz \
+            dist/bible-cli_*.tar.gz \
             dist/checksums.txt \
             --verify-tag \
             --notes-file "docs/releases/$GITHUB_REF_NAME.md" \
-            --title "Bible Terminal $GITHUB_REF_NAME"
+            --title "Bible CLI $GITHUB_REF_NAME"

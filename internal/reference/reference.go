@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/vmrocha/bible-terminal/internal/canon"
+	"github.com/vmrocha/bible-cli/internal/canon"
 )
 
 // Query is a parsed, not-yet-resolved Bible reference.

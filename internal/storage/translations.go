@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/vmrocha/bible-terminal/internal/bible"
+	"github.com/vmrocha/bible-cli/internal/bible"
 )
 
 // Translations lists every translation bundled in the embedded database.

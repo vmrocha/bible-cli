@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/vmrocha/bible-terminal/internal/config"
+	"github.com/vmrocha/bible-cli/internal/config"
 )
 
 type stubPreferenceStore struct {
@@ -37,7 +37,7 @@ func (store *stubPreferenceStore) Reset() error {
 
 func preferenceStore() *stubPreferenceStore {
 	return &stubPreferenceStore{
-		path:        "/home/reader/.config/bible-terminal/config.json",
+		path:        "/home/reader/.config/bible-cli/config.json",
 		preferences: config.Defaults(),
 	}
 }

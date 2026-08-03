@@ -2,7 +2,7 @@
 
 ## Community standards
 
-By participating in Bible Terminal, you agree to follow the
+By participating in Bible CLI, you agree to follow the
 [Code of Conduct](CODE_OF_CONDUCT.md). Report suspected vulnerabilities through
 the private channels in the [Security Policy](SECURITY.md), not through a public
 issue.

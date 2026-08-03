@@ -1,4 +1,4 @@
-# Releasing Bible Terminal
+# Releasing Bible CLI
 
 Release tags publish checksummed, self-contained archives through GitHub
 Actions. A release must come from a reviewed commit on `main`.
@@ -22,7 +22,7 @@ and shell completion.
 Create and push an annotated tag from the reviewed `main` commit:
 
 ```console
-git tag -a v0.1.0 -m "Bible Terminal v0.1.0"
+git tag -a v0.1.0 -m "Bible CLI v0.1.0"
 git push origin v0.1.0
 ```
 

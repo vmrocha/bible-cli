@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/vmrocha/bible-terminal/internal/buildinfo"
+	"github.com/vmrocha/bible-cli/internal/buildinfo"
 )
 
 var testBuild = buildinfo.Info{

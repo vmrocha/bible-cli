@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible problem with Bible Terminal
+description: Report a reproducible problem with Bible CLI
 title: "[Bug]: "
 labels:
   - bug
@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping improve Bible Terminal. Do not include secrets or personal data. For suspected security vulnerabilities, follow the [security policy](https://github.com/vmrocha/bible-terminal/security/policy) instead of opening an issue.
+        Thanks for helping improve Bible CLI. Do not include secrets or personal data. For suspected security vulnerabilities, follow the [security policy](https://github.com/vmrocha/bible-cli/security/policy) instead of opening an issue.
 
   - type: checkboxes
     id: prerequisites
@@ -22,7 +22,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: Bible Terminal version
+      label: Bible CLI version
       description: Paste the first line from `bible version` or provide the commit hash.
       placeholder: bible v0.1.0
     validations:
@@ -94,5 +94,5 @@ body:
     attributes:
       label: Code of Conduct
       options:
-        - label: I agree to follow the [Code of Conduct](https://github.com/vmrocha/bible-terminal/blob/main/CODE_OF_CONDUCT.md).
+        - label: I agree to follow the [Code of Conduct](https://github.com/vmrocha/bible-cli/blob/main/CODE_OF_CONDUCT.md).
           required: true

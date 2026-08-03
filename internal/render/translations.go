@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/vmrocha/bible-terminal/internal/bible"
+	"github.com/vmrocha/bible-cli/internal/bible"
 )
 
 // Translations writes bundled translation metadata and attribution.

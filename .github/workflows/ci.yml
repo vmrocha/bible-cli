@@ -60,7 +60,7 @@ jobs:
         run: |
           cd "$RUNNER_TEMP/release-dist"
           sha256sum --check checksums.txt
-          test "$(find . -name 'bible-terminal_*.tar.gz' | wc -l)" -eq 4
+          test "$(find . -name 'bible-cli_*.tar.gz' | wc -l)" -eq 4
 
       - name: Upload release archives
         uses: actions/upload-artifact@v7
