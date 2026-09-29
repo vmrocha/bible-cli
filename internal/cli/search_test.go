@@ -37,7 +37,7 @@ func TestSearchCommand(t *testing.T) {
 		Verse:       10,
 		Text:        "He would have given you living water.",
 	}}}
-	factory := func(context.Context) (Searcher, error) { return searcher, nil }
+	factory := func(context.Context, string) (Searcher, error) { return searcher, nil }
 
 	output, err := executeWithOptions(
 		t,
@@ -69,7 +69,7 @@ func TestSearchCommandAutomaticallyUsesPlainOutputWhenRedirected(t *testing.T) {
 			{Start: 7, End: 12},
 		},
 	}}}
-	factory := func(context.Context) (Searcher, error) { return searcher, nil }
+	factory := func(context.Context, string) (Searcher, error) { return searcher, nil }
 	output := new(bytes.Buffer)
 	command := New(testBuild, WithSearcherFactory(factory))
 	command.SetOut(output)
@@ -99,7 +99,7 @@ func TestSearchCommandHighlightsInteractiveMatches(t *testing.T) {
 			{Start: 7, End: 12},
 		},
 	}}}
-	factory := func(context.Context) (Searcher, error) { return searcher, nil }
+	factory := func(context.Context, string) (Searcher, error) { return searcher, nil }
 
 	output, err := executeWithOptions(t, []Option{WithSearcherFactory(factory)}, "search", "living water")
 	if err != nil {
@@ -129,7 +129,7 @@ func TestSearchCommandRejectsInvalidInput(t *testing.T) {
 
 func TestSearchCommandReportsSearchErrorAndCloses(t *testing.T) {
 	searcher := &stubSearcher{err: errors.New("search failed")}
-	factory := func(context.Context) (Searcher, error) { return searcher, nil }
+	factory := func(context.Context, string) (Searcher, error) { return searcher, nil }
 
 	_, err := executeWithOptions(t, []Option{WithSearcherFactory(factory)}, "search", "water")
 	if err == nil || !strings.Contains(err.Error(), "search failed") {

@@ -12,6 +12,8 @@ coverage.txt
 coverage.html
 
 # Local databases and generated data
+/data/local/
+/internal/storage/nvi_local.go
 *.db
 !internal/storage/engwebp.db
 *.db-journal

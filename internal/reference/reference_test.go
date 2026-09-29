@@ -14,6 +14,8 @@ func TestParse(t *testing.T) {
 		{"Jn. 3:16", Query{Book: "john", Chapter: 3, StartVerse: 16, EndVerse: 16}},
 		{"  Psalm   23  ", Query{Book: "psalms", Chapter: 23}},
 		{"1 Cor. 13", Query{Book: "1-corinthians", Chapter: 13}},
+		{"João 3:16", Query{Book: "john", Chapter: 3, StartVerse: 16, EndVerse: 16}},
+		{"1 Coríntios 13", Query{Book: "1-corinthians", Chapter: 13}},
 	}
 
 	for _, test := range tests {
