@@ -20,7 +20,7 @@ type PassageReader interface {
 }
 
 // ReaderFactory opens the offline Bible reader on demand.
-type ReaderFactory func(context.Context) (PassageReader, error)
+type ReaderFactory func(context.Context, string) (PassageReader, error)
 
 type configuration struct {
 	readerFactory      ReaderFactory
@@ -64,7 +64,7 @@ func newReadCommand(factory ReaderFactory, settings *outputSettings, isTerminal 
 				return errors.New("Bible reader is unavailable")
 			}
 
-			reader, err := factory(command.Context())
+			reader, err := factory(command.Context(), settings.translation)
 			if err != nil {
 				return err
 			}

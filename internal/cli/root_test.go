@@ -2,10 +2,12 @@ package cli
 
 import (
 	"bytes"
+	"context"
 	"io"
 	"strings"
 	"testing"
 
+	"github.com/vmrocha/bible-cli/internal/bible"
 	"github.com/vmrocha/bible-cli/internal/buildinfo"
 )
 
@@ -53,11 +55,31 @@ func TestHelp(t *testing.T) {
 		"version",
 		"--plain",
 		"--no-color",
+		"--translation",
 		"--help",
 	} {
 		if !strings.Contains(output, expected) {
 			t.Errorf("help output does not contain %q", expected)
 		}
+	}
+}
+
+func TestTranslationFlagIsNormalizedForFactories(t *testing.T) {
+	var selected string
+	reader := &stubReader{passage: bible.Passage{
+		Book:    bible.Book{Name: "John"},
+		Chapter: 3,
+		Verses:  []bible.Verse{{Chapter: 3, Number: 16, Text: "Text"}},
+	}}
+	factory := func(_ context.Context, translation string) (PassageReader, error) {
+		selected = translation
+		return reader, nil
+	}
+	if _, err := executeWithOptions(t, []Option{WithReaderFactory(factory)}, "--translation", "webp", "read", "John", "3:16"); err != nil {
+		t.Fatalf("execute translated read: %v", err)
+	}
+	if selected != "engwebp" {
+		t.Fatalf("factory received translation %q, want engwebp", selected)
 	}
 }
 

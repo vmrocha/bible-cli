@@ -3,11 +3,17 @@
 /dist/
 *.out
 
+# Website dependencies and generated site
+/website/node_modules/
+/website/.vitepress/dist/
+
 # Test and coverage outputs
 coverage.txt
 coverage.html
 
 # Local databases and generated data
+/data/local/
+/internal/storage/nvi_local.go
 *.db
 !internal/storage/engwebp.db
 *.db-journal

@@ -43,7 +43,7 @@ func randomPassageFixture() bible.Passage {
 
 func TestRandomCommand(t *testing.T) {
 	reader := &stubRandomReader{passage: randomPassageFixture()}
-	factory := func(context.Context) (RandomReader, error) { return reader, nil }
+	factory := func(context.Context, string) (RandomReader, error) { return reader, nil }
 
 	output, err := executeWithOptions(
 		t,
@@ -66,7 +66,7 @@ func TestRandomCommand(t *testing.T) {
 
 func TestRandomCommandAutomaticallyUsesPlainOutputWhenRedirected(t *testing.T) {
 	reader := &stubRandomReader{passage: randomPassageFixture()}
-	factory := func(context.Context) (RandomReader, error) { return reader, nil }
+	factory := func(context.Context, string) (RandomReader, error) { return reader, nil }
 	output := new(bytes.Buffer)
 	command := New(testBuild, WithRandomReaderFactory(factory))
 	command.SetOut(output)
@@ -83,7 +83,7 @@ func TestRandomCommandAutomaticallyUsesPlainOutputWhenRedirected(t *testing.T) {
 
 func TestRandomCommandReportsReaderErrorAndCloses(t *testing.T) {
 	reader := &stubRandomReader{err: errors.New("random failed")}
-	factory := func(context.Context) (RandomReader, error) { return reader, nil }
+	factory := func(context.Context, string) (RandomReader, error) { return reader, nil }
 
 	_, err := executeWithOptions(t, []Option{WithRandomReaderFactory(factory)}, "random")
 	if err == nil || !strings.Contains(err.Error(), "random failed") {
