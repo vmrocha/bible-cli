@@ -31,3 +31,18 @@ func TestResolveNormalizesPunctuationAndSpacing(t *testing.T) {
 		}
 	}
 }
+
+func TestPortugueseProtestantBooks(t *testing.T) {
+	books := PortugueseProtestantBooks()
+	if len(books) != 66 {
+		t.Fatalf("got %d books, want 66", len(books))
+	}
+	if books[42].Book.Name != "João" || books[65].Book.Name != "Apocalipse" {
+		t.Fatalf("unexpected Portuguese names: %q and %q", books[42].Book.Name, books[65].Book.Name)
+	}
+	for _, value := range []string{"João", "Joao"} {
+		if got, ok := Resolve(value); !ok || got != "john" {
+			t.Errorf("Resolve(%q) = %q, %t; want john, true", value, got, ok)
+		}
+	}
+}

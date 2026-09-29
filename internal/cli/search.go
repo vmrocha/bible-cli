@@ -24,7 +24,7 @@ type Searcher interface {
 }
 
 // SearcherFactory opens the offline Bible search index on demand.
-type SearcherFactory func(context.Context) (Searcher, error)
+type SearcherFactory func(context.Context, string) (Searcher, error)
 
 // WithSearcherFactory enables commands that access the embedded search index.
 func WithSearcherFactory(factory SearcherFactory) Option {
@@ -52,7 +52,7 @@ func newSearchCommand(factory SearcherFactory, settings *outputSettings, isTermi
 				return errors.New("Bible search is unavailable")
 			}
 
-			searcher, err := factory(command.Context())
+			searcher, err := factory(command.Context(), settings.translation)
 			if err != nil {
 				return err
 			}

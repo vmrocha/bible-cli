@@ -46,9 +46,10 @@ func (reader *Reader) Search(ctx context.Context, query string, limit int) ([]bi
          AND b.id = v.book_id
         JOIN translations AS t ON t.id = v.translation_id
         WHERE verses_fts MATCH ?
+          AND v.translation_id = ?
         ORDER BY relevance, b.position, v.chapter, v.verse
         LIMIT ?
-    `, highlightStart, highlightEnd, match, limit)
+    `, highlightStart, highlightEnd, match, reader.translationID, limit)
 	if err != nil {
 		return nil, fmt.Errorf("search verses: %w", err)
 	}
@@ -73,6 +74,7 @@ func (reader *Reader) Search(ctx context.Context, query string, limit int) ([]bi
 		); err != nil {
 			return nil, fmt.Errorf("scan search result: %w", err)
 		}
+		result.Book.Name = localizedBookName(reader.translationID, result.Book.ID, result.Book.Name)
 		highlights, err := parseHighlights(result.Text, highlightedText)
 		if err != nil {
 			return nil, fmt.Errorf(
