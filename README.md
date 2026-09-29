@@ -164,11 +164,17 @@ text licensing requirements.
 
 ## Installation
 
+Install the latest stable release with Homebrew on macOS or Linux:
+
+```console
+brew install vmrocha/tap/bible-cli
+```
+
 Tagged releases ship checksummed single-binary archives for macOS and Linux on
 Intel/AMD64 and ARM64. Public release downloads require no GitHub account, API
 token, or GitHub CLI. See the [installation guide](docs/INSTALL.md) for archive
-verification, installation, source builds, and Bash, Zsh, Fish, and PowerShell
-completion setup.
+verification, Homebrew upgrades, source builds, and Bash, Zsh, Fish, and
+PowerShell completion setup.
 
 ## License
 
