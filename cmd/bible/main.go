@@ -25,17 +25,17 @@ func main() {
 
 	command := cli.New(
 		buildinfo.Current(),
-		cli.WithReaderFactory(func(ctx context.Context) (cli.PassageReader, error) {
-			return storage.OpenEmbedded(ctx)
+		cli.WithReaderFactory(func(ctx context.Context, translation string) (cli.PassageReader, error) {
+			return storage.OpenEmbedded(ctx, translation)
 		}),
-		cli.WithSearcherFactory(func(ctx context.Context) (cli.Searcher, error) {
-			return storage.OpenEmbedded(ctx)
+		cli.WithSearcherFactory(func(ctx context.Context, translation string) (cli.Searcher, error) {
+			return storage.OpenEmbedded(ctx, translation)
 		}),
 		cli.WithTranslationReaderFactory(func(ctx context.Context) (cli.TranslationReader, error) {
 			return storage.OpenEmbedded(ctx)
 		}),
-		cli.WithRandomReaderFactory(func(ctx context.Context) (cli.RandomReader, error) {
-			return storage.OpenEmbedded(ctx)
+		cli.WithRandomReaderFactory(func(ctx context.Context, translation string) (cli.RandomReader, error) {
+			return storage.OpenEmbedded(ctx, translation)
 		}),
 		cli.WithPreferenceStore(preferenceStore),
 	)

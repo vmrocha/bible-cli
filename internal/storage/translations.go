@@ -2,14 +2,52 @@ package storage
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
+	"sort"
 
 	"github.com/vmrocha/bible-cli/internal/bible"
 )
 
-// Translations lists every translation bundled in the embedded database.
+// Translations lists every registered embedded translation.
 func (reader *Reader) Translations(ctx context.Context) ([]bible.Translation, error) {
-	rows, err := reader.connection.QueryContext(ctx, `
+	var translations []bible.Translation
+	for _, id := range embeddedTranslationIDs() {
+		if id == reader.translationID {
+			entries, err := translationsFromConnection(ctx, reader.connection)
+			if err != nil {
+				return nil, err
+			}
+			translations = append(translations, entries...)
+			continue
+		}
+
+		other, err := OpenEmbedded(ctx, id)
+		if err != nil {
+			return nil, err
+		}
+		entries, readErr := translationsFromConnection(ctx, other.connection)
+		closeErr := other.Close()
+		if readErr != nil || closeErr != nil {
+			return nil, errors.Join(readErr, closeErr)
+		}
+		translations = append(translations, entries...)
+	}
+	sort.Slice(translations, func(i, j int) bool {
+		if translations[i].LanguageTag != translations[j].LanguageTag {
+			return translations[i].LanguageTag < translations[j].LanguageTag
+		}
+		if translations[i].Name != translations[j].Name {
+			return translations[i].Name < translations[j].Name
+		}
+		return translations[i].ID < translations[j].ID
+	})
+	return translations, nil
+}
+
+func translationsFromConnection(ctx context.Context, connection *sql.Conn) ([]bible.Translation, error) {
+	rows, err := connection.QueryContext(ctx, `
         SELECT
             id,
             name,

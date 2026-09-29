@@ -1,16 +1,19 @@
 package cli
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/mattn/go-isatty"
 	"github.com/spf13/cobra"
 	"github.com/vmrocha/bible-cli/internal/buildinfo"
+	"github.com/vmrocha/bible-cli/internal/config"
 )
 
 type outputSettings struct {
-	plain   bool
-	noColor bool
+	plain       bool
+	noColor     bool
+	translation string
 }
 
 // New constructs the root command with the supplied build metadata.
@@ -19,7 +22,7 @@ func New(info buildinfo.Info, options ...Option) *cobra.Command {
 	for _, option := range options {
 		option(&configuration)
 	}
-	settings := &outputSettings{}
+	settings := &outputSettings{translation: config.Defaults().Translation}
 
 	command := &cobra.Command{
 		Use:           "bible",
@@ -32,19 +35,30 @@ func New(info buildinfo.Info, options ...Option) *cobra.Command {
 	command.SetVersionTemplate("bible {{.Version}}\n")
 	command.PersistentFlags().BoolVar(&settings.plain, "plain", false, "emit stable plain output")
 	command.PersistentFlags().BoolVar(&settings.noColor, "no-color", false, "disable terminal colors")
+	command.PersistentFlags().StringVarP(&settings.translation, "translation", "t", settings.translation, "Bible translation id or abbreviation")
 	command.PersistentPreRunE = func(selected *cobra.Command, _ []string) error {
-		if configuration.preferenceStore == nil || skipsSavedPreferences(selected) {
+		if skipsSavedPreferences(selected) {
 			return nil
 		}
-		preferences, err := configuration.preferenceStore.Load()
-		if err != nil {
-			return err
+		if configuration.preferenceStore != nil {
+			preferences, err := configuration.preferenceStore.Load()
+			if err != nil {
+				return err
+			}
+			if !command.PersistentFlags().Changed("plain") {
+				settings.plain = preferences.Plain
+			}
+			if !command.PersistentFlags().Changed("no-color") {
+				settings.noColor = !preferences.Color
+			}
+			if !command.PersistentFlags().Changed("translation") {
+				settings.translation = preferences.Translation
+			}
 		}
-		if !command.PersistentFlags().Changed("plain") {
-			settings.plain = preferences.Plain
-		}
-		if !command.PersistentFlags().Changed("no-color") {
-			settings.noColor = !preferences.Color
+		if normalized, ok := config.NormalizeTranslation(settings.translation); ok {
+			settings.translation = normalized
+		} else {
+			return fmt.Errorf("translation is not available: %s", settings.translation)
 		}
 		return nil
 	}
