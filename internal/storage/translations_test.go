@@ -3,6 +3,8 @@ package storage
 import (
 	"context"
 	"testing"
+
+	"github.com/vmrocha/bible-cli/internal/bible"
 )
 
 func TestTranslations(t *testing.T) {
@@ -16,10 +18,16 @@ func TestTranslations(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Translations: %v", err)
 	}
-	if len(translations) != 1 {
-		t.Fatalf("Translations returned %d entries, want 1", len(translations))
+	if len(translations) != len(embeddedTranslationIDs()) {
+		t.Fatalf("Translations returned %d entries, want %d", len(translations), len(embeddedTranslationIDs()))
 	}
-	got := translations[0]
+	var got bible.Translation
+	for _, translation := range translations {
+		if translation.ID == "engwebp" {
+			got = translation
+			break
+		}
+	}
 	if got.ID != "engwebp" ||
 		got.Abbreviation != "WEBP" ||
 		got.Name != "World English Bible" ||
