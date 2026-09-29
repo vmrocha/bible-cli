@@ -1,5 +1,22 @@
 # Installing Bible CLI
 
+## Homebrew
+
+Install the latest stable release from the project tap on macOS or Linux:
+
+```console
+brew install vmrocha/tap/bible-cli
+```
+
+The formula builds from the immutable tagged source archive and installs the
+`bible` executable plus Bash, Zsh, and Fish completions. Upgrade or remove it
+with the usual Homebrew commands:
+
+```console
+brew upgrade bible-cli
+brew uninstall bible-cli
+```
+
 ## Release archives
 
 Tagged releases provide single-binary archives for:

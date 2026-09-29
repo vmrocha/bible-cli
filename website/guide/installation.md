@@ -1,8 +1,18 @@
 # Installation
 
-Bible CLI releases are single-binary archives for macOS and Linux on AMD64 and
-ARM64. Downloads include checksums for verification and do not require a
-GitHub account.
+Bible CLI supports Homebrew and single-binary release archives on macOS and
+Linux.
+
+## Homebrew
+
+Install the latest stable release from the project tap:
+
+```console
+brew install vmrocha/tap/bible-cli
+```
+
+Homebrew also installs Bash, Zsh, and Fish completions. Use
+`brew upgrade bible-cli` to install future stable releases.
 
 ## Download a release
 
