@@ -12,7 +12,7 @@ import (
 	"github.com/vmrocha/bible-cli/internal/bible"
 )
 
-// Random selects one verse uniformly from the bundled WEBP translation.
+// Random selects one verse uniformly from the selected translation.
 func (reader *Reader) Random(ctx context.Context, source io.Reader) (bible.Passage, error) {
 	if source == nil {
 		return bible.Passage{}, errors.New("random source is required")
@@ -22,8 +22,8 @@ func (reader *Reader) Random(ctx context.Context, source io.Reader) (bible.Passa
 	if err := reader.connection.QueryRowContext(ctx, `
         SELECT count(*)
         FROM verses
-        WHERE translation_id = 'engwebp'
-    `).Scan(&count); err != nil {
+        WHERE translation_id = ?
+    `, reader.translationID).Scan(&count); err != nil {
 		return bible.Passage{}, fmt.Errorf("count verses: %w", err)
 	}
 	if count == 0 {
@@ -52,10 +52,10 @@ func (reader *Reader) Random(ctx context.Context, source io.Reader) (bible.Passa
           ON b.translation_id = v.translation_id
          AND b.id = v.book_id
         JOIN translations AS t ON t.id = v.translation_id
-        WHERE v.translation_id = 'engwebp'
+        WHERE v.translation_id = ?
         ORDER BY b.position, v.chapter, v.verse
         LIMIT 1 OFFSET ?
-    `, selection.Int64()).Scan(
+    `, reader.translationID, selection.Int64()).Scan(
 		&passage.Book.ID,
 		&passage.Book.SourceCode,
 		&passage.Book.Position,
@@ -71,6 +71,7 @@ func (reader *Reader) Random(ctx context.Context, source io.Reader) (bible.Passa
 	if err != nil {
 		return bible.Passage{}, fmt.Errorf("read random verse: %w", err)
 	}
+	passage.Book.Name = localizedBookName(reader.translationID, passage.Book.ID, passage.Book.Name)
 
 	verse.BookID = passage.Book.ID
 	passage.Chapter = verse.Chapter
