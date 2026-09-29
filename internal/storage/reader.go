@@ -6,6 +6,7 @@ import (
 	_ "embed"
 	"errors"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/vmrocha/bible-cli/internal/bible"
@@ -15,19 +16,48 @@ import (
 //go:embed engwebp.db
 var embeddedWEBP []byte
 
+var embeddedTranslations = map[string][]byte{
+	"engwebp": embeddedWEBP,
+}
+
 type deserializer interface {
 	Deserialize([]byte) error
 }
 
 // Reader provides read-only access to the database embedded in the binary.
 type Reader struct {
-	database   *sql.DB
-	connection *sql.Conn
+	database      *sql.DB
+	connection    *sql.Conn
+	translationID string
+}
+
+// RegisterEmbedded adds a locally embedded translation during package
+// initialization. It is intended for ignored, license-specific source files.
+func RegisterEmbedded(id string, database []byte) {
+	if id == "" || len(database) == 0 {
+		panic("embedded translation requires an id and database")
+	}
+	if _, exists := embeddedTranslations[id]; exists {
+		panic("embedded translation is already registered: " + id)
+	}
+	embeddedTranslations[id] = database
 }
 
 // OpenEmbedded loads the embedded database into a dedicated in-memory
 // connection. It does not create files or require network access.
-func OpenEmbedded(ctx context.Context) (*Reader, error) {
+func OpenEmbedded(ctx context.Context, requested ...string) (*Reader, error) {
+	if len(requested) > 1 {
+		return nil, errors.New("open embedded database: at most one translation may be selected")
+	}
+	translationID := "engwebp"
+	if len(requested) == 1 && requested[0] != "" {
+		translationID = requested[0]
+	}
+	embeddedDatabase, ok := embeddedTranslations[translationID]
+	if !ok {
+		return nil, fmt.Errorf("translation is not embedded: %s", translationID)
+	}
+
 	database, err := sql.Open("sqlite", ":memory:")
 	if err != nil {
 		return nil, fmt.Errorf("open embedded database: %w", err)
@@ -46,7 +76,7 @@ func OpenEmbedded(ctx context.Context) (*Reader, error) {
 		if !ok {
 			return errors.New("SQLite driver does not support database deserialization")
 		}
-		return loader.Deserialize(embeddedWEBP)
+		return loader.Deserialize(embeddedDatabase)
 	}); err != nil {
 		connection.Close()
 		database.Close()
@@ -69,8 +99,23 @@ func OpenEmbedded(ctx context.Context) (*Reader, error) {
 		database.Close()
 		return nil, fmt.Errorf("unsupported embedded schema version %d", schemaVersion)
 	}
+	var translationCount int
+	if err := connection.QueryRowContext(
+		ctx,
+		"SELECT count(*) FROM translations WHERE id = ?",
+		translationID,
+	).Scan(&translationCount); err != nil {
+		connection.Close()
+		database.Close()
+		return nil, fmt.Errorf("validate embedded translation: %w", err)
+	}
+	if translationCount != 1 {
+		connection.Close()
+		database.Close()
+		return nil, fmt.Errorf("embedded database does not contain translation %s", translationID)
+	}
 
-	return &Reader{database: database, connection: connection}, nil
+	return &Reader{database: database, connection: connection, translationID: translationID}, nil
 }
 
 // Close releases the in-memory database.
@@ -88,12 +133,12 @@ func (reader *Reader) Read(ctx context.Context, query reference.Query) (bible.Pa
 	rows, err := reader.connection.QueryContext(ctx, `
         SELECT chapter, verse, text
         FROM verses
-        WHERE translation_id = 'engwebp'
+        WHERE translation_id = ?
           AND book_id = ?
           AND chapter = ?
           AND (? = 0 OR verse BETWEEN ? AND ?)
         ORDER BY verse
-    `, book.ID, query.Chapter, query.StartVerse, query.StartVerse, query.EndVerse)
+    `, reader.translationID, book.ID, query.Chapter, query.StartVerse, query.StartVerse, query.EndVerse)
 	if err != nil {
 		return bible.Passage{}, fmt.Errorf("read passage: %w", err)
 	}
@@ -189,9 +234,9 @@ func (reader *Reader) resolveBook(ctx context.Context, name string) (bible.Book,
         SELECT b.id, b.source_code, b.position, b.name, t.abbreviation
         FROM books AS b
         JOIN translations AS t ON t.id = b.translation_id
-        WHERE b.translation_id = 'engwebp'
+        WHERE b.translation_id = ?
           AND (lower(b.name) = lower(?) OR lower(b.source_code) = lower(?) OR b.id = ?)
-    `, name, name, candidateID).Scan(
+    `, reader.translationID, name, name, candidateID).Scan(
 		&book.ID,
 		&book.SourceCode,
 		&book.Position,
@@ -204,6 +249,7 @@ func (reader *Reader) resolveBook(ctx context.Context, name string) (bible.Book,
 	if err != nil {
 		return bible.Book{}, "", fmt.Errorf("resolve book: %w", err)
 	}
+	book.Name = localizedBookName(reader.translationID, book.ID, book.Name)
 	return book, translation, nil
 }
 
@@ -212,11 +258,12 @@ func (reader *Reader) bookAtPosition(ctx context.Context, position int) (bible.B
 	err := reader.connection.QueryRowContext(ctx, `
         SELECT id, source_code, position, name
         FROM books
-        WHERE translation_id = 'engwebp' AND position = ?
-    `, position).Scan(&book.ID, &book.SourceCode, &book.Position, &book.Name)
+        WHERE translation_id = ? AND position = ?
+    `, reader.translationID, position).Scan(&book.ID, &book.SourceCode, &book.Position, &book.Name)
 	if err != nil {
 		return bible.Book{}, err
 	}
+	book.Name = localizedBookName(reader.translationID, book.ID, book.Name)
 	return book, nil
 }
 
@@ -225,12 +272,21 @@ func (reader *Reader) lastChapter(ctx context.Context, bookID string) (int, erro
 	err := reader.connection.QueryRowContext(ctx, `
         SELECT max(chapter)
         FROM verses
-        WHERE translation_id = 'engwebp' AND book_id = ?
-    `, bookID).Scan(&chapter)
+        WHERE translation_id = ? AND book_id = ?
+    `, reader.translationID, bookID).Scan(&chapter)
 	if err != nil {
 		return 0, fmt.Errorf("read last chapter for %s: %w", bookID, err)
 	}
 	return chapter, nil
+}
+
+func embeddedTranslationIDs() []string {
+	ids := make([]string, 0, len(embeddedTranslations))
+	for id := range embeddedTranslations {
+		ids = append(ids, id)
+	}
+	sort.Strings(ids)
+	return ids
 }
 
 func passageNotFound(book string, query reference.Query) error {

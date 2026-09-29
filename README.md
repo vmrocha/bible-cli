@@ -55,8 +55,9 @@ bible read "Psalm 23" | less   # automatically plain, with no ANSI escapes
 bible read "Psalm 23" --no-color # readable layout without terminal colors
 ```
 
-`--plain` and `--no-color` are global flags and may appear before or after the
-subcommand.
+`--plain`, `--no-color`, and `--translation` (`-t`) are global flags and may
+appear before or after the subcommand. The translation flag accepts a bundled
+translation id or registered abbreviation.
 
 Search works entirely offline and returns verses containing every query token,
 ranked by relevance with canonical Scripture order as a stable tie-breaker.
@@ -82,7 +83,7 @@ bible random --plain
 bible translations
 ```
 
-`bible random` selects uniformly from all 31,103 bundled WEBP verses.
+`bible random` selects uniformly from all verses in the selected translation.
 `bible translations` reports the bundled text edition, language, canon, source,
 public-domain rights notice, trademark notice, and publisher text policy.
 
@@ -110,6 +111,27 @@ bible config reset
 Saved preferences provide defaults. Explicit command-line flags take priority,
 including `--plain=false` and `--no-color=false`. Redirected output remains
 plain even when the saved plain preference is false.
+
+## Local licensed translations
+
+Licensed translations can be embedded locally without adding their text to
+Git. A local registration source file can call `storage.RegisterEmbedded` and
+`config.RegisterTranslation` during package initialization, while both that
+file and its database remain ignored. The tracked application then supports the
+translation across reading, search, navigation, random selection, discovery,
+and configuration without making the licensed text part of public releases.
+
+For the locally registered Brazilian Portuguese NVI database:
+
+```console
+bible --translation nvi read "João 3:16"
+bible -t ptnvi search amor
+bible config set translation nvi
+bible books --translation nvi
+```
+
+Only use and distribute a locally embedded translation as allowed by its
+publisher authorization.
 
 The first release should:
 

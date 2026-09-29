@@ -14,9 +14,13 @@ func newBooksCommand(settings *outputSettings, isTerminal func(io.Writer) bool) 
 		Short: "List books and accepted aliases",
 		Args:  cobra.NoArgs,
 		RunE: func(command *cobra.Command, _ []string) error {
+			books := canon.ProtestantBooks()
+			if settings.translation == "ptnvi" {
+				books = canon.PortugueseProtestantBooks()
+			}
 			return render.Books(
 				command.OutOrStdout(),
-				canon.ProtestantBooks(),
+				books,
 				renderOptions(command, settings, isTerminal),
 			)
 		},
