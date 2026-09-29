@@ -44,7 +44,7 @@ func TestReadCommand(t *testing.T) {
 			{Chapter: 3, Number: 16, Text: "For God so loved…"},
 		},
 	}}
-	factory := func(context.Context) (PassageReader, error) { return reader, nil }
+	factory := func(context.Context, string) (PassageReader, error) { return reader, nil }
 
 	output, err := executeWithOptions(t, []Option{WithReaderFactory(factory)}, "read", "John", "3:16", "--no-color")
 	if err != nil {
@@ -67,7 +67,7 @@ func TestReadCommandStylesInteractiveOutput(t *testing.T) {
 		EndVerse:    16,
 		Verses:      []bible.Verse{{Chapter: 3, Number: 16, Text: "For God so loved…"}},
 	}}
-	factory := func(context.Context) (PassageReader, error) { return reader, nil }
+	factory := func(context.Context, string) (PassageReader, error) { return reader, nil }
 
 	output, err := executeWithOptions(t, []Option{WithReaderFactory(factory)}, "read", "John", "3:16")
 	if err != nil {
@@ -87,7 +87,7 @@ func TestReadCommandAutomaticallyUsesPlainOutputWhenRedirected(t *testing.T) {
 		EndVerse:    16,
 		Verses:      []bible.Verse{{Chapter: 3, Number: 16, Text: "For God so loved…"}},
 	}}
-	factory := func(context.Context) (PassageReader, error) { return reader, nil }
+	factory := func(context.Context, string) (PassageReader, error) { return reader, nil }
 	output := new(bytes.Buffer)
 	command := New(testBuild, WithReaderFactory(factory))
 	command.SetOut(output)
@@ -111,7 +111,7 @@ func TestReadCommandPlainOverridesInteractiveOutput(t *testing.T) {
 		Chapter: 23,
 		Verses:  []bible.Verse{{Chapter: 23, Number: 1, Text: "Yahweh is my shepherd."}},
 	}}
-	factory := func(context.Context) (PassageReader, error) { return reader, nil }
+	factory := func(context.Context, string) (PassageReader, error) { return reader, nil }
 
 	output, err := executeWithOptions(
 		t,
@@ -128,7 +128,7 @@ func TestReadCommandPlainOverridesInteractiveOutput(t *testing.T) {
 
 func TestReadCommandReportsReaderError(t *testing.T) {
 	reader := &stubReader{err: errors.New("passage failed")}
-	factory := func(context.Context) (PassageReader, error) { return reader, nil }
+	factory := func(context.Context, string) (PassageReader, error) { return reader, nil }
 
 	_, err := executeWithOptions(t, []Option{WithReaderFactory(factory)}, "read", "John", "3")
 	if err == nil || !strings.Contains(err.Error(), "passage failed") {
@@ -149,7 +149,7 @@ func TestReadCommandNavigates(t *testing.T) {
 			Verses:      []bible.Verse{{Chapter: 4, Number: 1, Text: "After these things…"}},
 		},
 	}
-	factory := func(context.Context) (PassageReader, error) { return reader, nil }
+	factory := func(context.Context, string) (PassageReader, error) { return reader, nil }
 
 	_, err := executeWithOptions(t, []Option{WithReaderFactory(factory)}, "read", "John", "3", "--next")
 	if err != nil {

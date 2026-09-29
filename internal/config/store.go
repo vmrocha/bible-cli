@@ -7,9 +7,35 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 const schemaVersion = 1
+
+var translationAliases = map[string]string{
+	"engwebp": "engwebp",
+	"webp":    "engwebp",
+}
+
+// RegisterTranslation adds a locally available translation id and aliases.
+// Registration is intended to happen during package initialization.
+func RegisterTranslation(id string, aliases ...string) {
+	id = strings.ToLower(strings.TrimSpace(id))
+	if id == "" {
+		panic("translation id is required")
+	}
+	values := append([]string{id}, aliases...)
+	for _, value := range values {
+		key := strings.ToLower(strings.TrimSpace(value))
+		if key == "" {
+			panic("translation alias is required")
+		}
+		if existing, ok := translationAliases[key]; ok && existing != id {
+			panic(fmt.Sprintf("translation alias %q is already registered for %s", key, existing))
+		}
+		translationAliases[key] = id
+	}
+}
 
 // Preferences contains the user-configurable CLI defaults.
 type Preferences struct {
@@ -40,10 +66,16 @@ func (preferences Preferences) Validate() error {
 	if preferences.Version != schemaVersion {
 		return fmt.Errorf("unsupported configuration version %d", preferences.Version)
 	}
-	if preferences.Translation != "engwebp" {
+	if normalized, ok := NormalizeTranslation(preferences.Translation); !ok || normalized != preferences.Translation {
 		return fmt.Errorf("translation is not available: %s", preferences.Translation)
 	}
 	return nil
+}
+
+// NormalizeTranslation resolves a supported translation id or abbreviation.
+func NormalizeTranslation(value string) (string, bool) {
+	normalized, ok := translationAliases[strings.ToLower(strings.TrimSpace(value))]
+	return normalized, ok
 }
 
 // Store persists one configuration file.
