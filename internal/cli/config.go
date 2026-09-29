@@ -133,11 +133,8 @@ func newConfigResetCommand(store PreferenceStore) *cobra.Command {
 func updatePreference(preferences *config.Preferences, key, rawValue string) (string, error) {
 	switch key {
 	case "translation":
-		value := strings.ToLower(rawValue)
-		if value == "webp" {
-			value = "engwebp"
-		}
-		if value != "engwebp" {
+		value, ok := config.NormalizeTranslation(rawValue)
+		if !ok {
 			return "", fmt.Errorf("translation is not available: %s", rawValue)
 		}
 		preferences.Translation = value

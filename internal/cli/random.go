@@ -18,7 +18,7 @@ type RandomReader interface {
 }
 
 // RandomReaderFactory opens random verse access on demand.
-type RandomReaderFactory func(context.Context) (RandomReader, error)
+type RandomReaderFactory func(context.Context, string) (RandomReader, error)
 
 // WithRandomReaderFactory enables random verse discovery.
 func WithRandomReaderFactory(factory RandomReaderFactory) Option {
@@ -40,7 +40,7 @@ func newRandomCommand(
 			if factory == nil {
 				return errors.New("random verse reader is unavailable")
 			}
-			reader, err := factory(command.Context())
+			reader, err := factory(command.Context(), settings.translation)
 			if err != nil {
 				return err
 			}

@@ -23,6 +23,25 @@ func ProtestantBooks() []Entry {
 	return books
 }
 
+// PortugueseProtestantBooks returns the catalog with Portuguese display names
+// and both English and Portuguese aliases.
+func PortugueseProtestantBooks() []Entry {
+	books := ProtestantBooks()
+	for index := range books {
+		books[index].Aliases = append(books[index].Aliases, portugueseAliases[books[index].Book.ID]...)
+		if name, ok := portugueseNames[books[index].Book.ID]; ok {
+			books[index].Book.Name = name
+		}
+	}
+	return books
+}
+
+// PortugueseName returns the Brazilian Portuguese name for a canonical book.
+func PortugueseName(id string) (string, bool) {
+	name, ok := portugueseNames[id]
+	return name, ok
+}
+
 // Resolve returns the canonical book ID for a name, source code, ID, or alias.
 func Resolve(value string) (string, bool) {
 	id, ok := booksByAlias[normalize(value)]
@@ -38,6 +57,7 @@ var booksByAlias = func() map[string]string {
 	aliases := make(map[string]string, len(protestantBooks)*5)
 	for _, entry := range protestantBooks {
 		values := append([]string{entry.Book.ID, entry.Book.Name, entry.Book.SourceCode}, entry.Aliases...)
+		values = append(values, portugueseAliases[entry.Book.ID]...)
 		for _, value := range values {
 			key := normalize(value)
 			if existing, ok := aliases[key]; ok && existing != entry.Book.ID {
@@ -48,6 +68,51 @@ var booksByAlias = func() map[string]string {
 	}
 	return aliases
 }()
+
+var portugueseNames = map[string]string{
+	"genesis": "Gênesis", "exodus": "Êxodo", "leviticus": "Levítico", "numbers": "Números",
+	"deuteronomy": "Deuteronômio", "joshua": "Josué", "judges": "Juízes", "ruth": "Rute",
+	"1-samuel": "1 Samuel", "2-samuel": "2 Samuel", "1-kings": "1 Reis", "2-kings": "2 Reis",
+	"1-chronicles": "1 Crônicas", "2-chronicles": "2 Crônicas", "ezra": "Esdras", "nehemiah": "Neemias",
+	"esther": "Ester", "job": "Jó", "psalms": "Salmos", "proverbs": "Provérbios",
+	"ecclesiastes": "Eclesiastes", "song-of-solomon": "Cântico dos Cânticos", "isaiah": "Isaías",
+	"jeremiah": "Jeremias", "lamentations": "Lamentações", "ezekiel": "Ezequiel", "daniel": "Daniel",
+	"hosea": "Oseias", "joel": "Joel", "amos": "Amós", "obadiah": "Obadias", "jonah": "Jonas",
+	"micah": "Miqueias", "nahum": "Naum", "habakkuk": "Habacuque", "zephaniah": "Sofonias",
+	"haggai": "Ageu", "zechariah": "Zacarias", "malachi": "Malaquias", "matthew": "Mateus",
+	"mark": "Marcos", "luke": "Lucas", "john": "João", "acts": "Atos", "romans": "Romanos",
+	"1-corinthians": "1 Coríntios", "2-corinthians": "2 Coríntios", "galatians": "Gálatas",
+	"ephesians": "Efésios", "philippians": "Filipenses", "colossians": "Colossenses",
+	"1-thessalonians": "1 Tessalonicenses", "2-thessalonians": "2 Tessalonicenses",
+	"1-timothy": "1 Timóteo", "2-timothy": "2 Timóteo", "titus": "Tito", "philemon": "Filemom",
+	"hebrews": "Hebreus", "james": "Tiago", "1-peter": "1 Pedro", "2-peter": "2 Pedro",
+	"1-john": "1 João", "2-john": "2 João", "3-john": "3 João", "jude": "Judas",
+	"revelation": "Apocalipse",
+}
+
+var portugueseAliases = map[string][]string{
+	"genesis": {"Gênesis"}, "exodus": {"Êxodo"}, "leviticus": {"Levítico", "Lv"},
+	"numbers": {"Números"}, "deuteronomy": {"Deuteronômio"}, "joshua": {"Josué", "Js"},
+	"judges": {"Juízes", "Jz"}, "ruth": {"Rute", "Rt"}, "1-kings": {"1 Reis"}, "2-kings": {"2 Reis"},
+	"1-chronicles": {"1 Crônicas"}, "2-chronicles": {"2 Crônicas"}, "ezra": {"Esdras"},
+	"nehemiah": {"Neemias"}, "esther": {"Ester"}, "job": {"Jó"}, "psalms": {"Salmos", "Salmo"},
+	"proverbs": {"Provérbios"}, "ecclesiastes": {"Eclesiastes"},
+	"song-of-solomon": {"Cântico dos Cânticos", "Cânticos"}, "isaiah": {"Isaías"},
+	"jeremiah": {"Jeremias"}, "lamentations": {"Lamentações"}, "ezekiel": {"Ezequiel"},
+	"hosea": {"Oseias"}, "amos": {"Amós"}, "obadiah": {"Obadias"}, "jonah": {"Jonas"},
+	"micah": {"Miqueias"}, "nahum": {"Naum"}, "habakkuk": {"Habacuque"},
+	"zephaniah": {"Sofonias"}, "haggai": {"Ageu"}, "zechariah": {"Zacarias"},
+	"malachi": {"Malaquias"}, "matthew": {"Mateus"}, "mark": {"Marcos", "Mc"},
+	"luke": {"Lucas", "Lc"}, "john": {"João", "Joao"}, "acts": {"Atos", "At"},
+	"romans": {"Romanos"}, "1-corinthians": {"1 Coríntios"}, "2-corinthians": {"2 Coríntios"},
+	"galatians": {"Gálatas"}, "ephesians": {"Efésios"}, "philippians": {"Filipenses"},
+	"colossians": {"Colossenses"}, "1-thessalonians": {"1 Tessalonicenses"},
+	"2-thessalonians": {"2 Tessalonicenses"}, "1-timothy": {"1 Timóteo"},
+	"2-timothy": {"2 Timóteo"}, "titus": {"Tito"}, "philemon": {"Filemom"},
+	"hebrews": {"Hebreus"}, "james": {"Tiago"}, "1-peter": {"1 Pedro"}, "2-peter": {"2 Pedro"},
+	"1-john": {"1 João", "1 Joao"}, "2-john": {"2 João", "2 Joao"},
+	"3-john": {"3 João", "3 Joao"}, "jude": {"Judas"}, "revelation": {"Apocalipse", "Ap"},
+}
 
 var protestantBooks = []Entry{
 	{Book: bible.Book{ID: "genesis", SourceCode: "GEN", Position: 1, Name: "Genesis"}, Aliases: []string{"Gen", "Ge", "Gn"}},
