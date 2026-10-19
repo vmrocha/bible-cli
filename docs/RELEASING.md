@@ -1,7 +1,8 @@
 # Releasing Bible CLI
 
 Release tags publish checksummed, self-contained archives through GitHub
-Actions. A release must come from a reviewed commit on `main`.
+Actions. A release must come from a reviewed commit on `main`; the workflow
+verifies the tag is an ancestor of `origin/main` and fails otherwise.
 
 ## Homebrew credentials
 
