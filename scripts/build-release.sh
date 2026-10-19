@@ -58,14 +58,11 @@ for target in "${targets[@]}"; do
   stage="$work/$name"
   mkdir -p "$stage"
 
-  GOOS=$goos GOARCH=$goarch go build \
-    -trimpath \
-    -ldflags "-s -w \
-      -X github.com/vmrocha/bible-cli/internal/buildinfo.version=$version \
-      -X github.com/vmrocha/bible-cli/internal/buildinfo.commit=$commit \
-      -X github.com/vmrocha/bible-cli/internal/buildinfo.date=$build_date" \
-    -o "$stage/bible" \
-    ./cmd/bible
+  GOOS=$goos GOARCH=$goarch make --no-print-directory build \
+    BINARY="$stage/bible" \
+    VERSION="$version" \
+    COMMIT="$commit" \
+    BUILD_DATE="$build_date"
 
   cp LICENSE THIRD_PARTY_NOTICES.md "$stage/"
 
