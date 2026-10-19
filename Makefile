@@ -11,7 +11,7 @@ LDFLAGS := -s -w \
 .PHONY: build check clean fmt format-check lint test
 
 build:
-	go build -trimpath -ldflags "$(LDFLAGS)" -o $(BINARY) $(PACKAGE)
+	go build -trimpath -ldflags "$(LDFLAGS)" -o "$(BINARY)" $(PACKAGE)
 
 test:
 	go test -race ./...
