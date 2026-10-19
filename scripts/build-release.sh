@@ -30,6 +30,23 @@ if [[ -z $build_date || $build_date =~ [[:space:]] ]]; then
   exit 2
 fi
 
+sha256() {
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$@"
+  else
+    shasum -a 256 "$@"
+  fi
+}
+
+set_tarball_mtimes() {
+  local epoch=$1 stamp
+  shift
+  if ! stamp=$(date -u -d "@$epoch" +%Y%m%d%H%M.%S 2>/dev/null); then
+    stamp=$(date -u -r "$epoch" +%Y%m%d%H%M.%S)
+  fi
+  TZ=UTC touch -t "$stamp" "$@"
+}
+
 root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 mkdir -p "$output"
 output=$(cd "$output" && pwd)
@@ -65,10 +82,10 @@ for target in "${targets[@]}"; do
     BUILD_DATE="$build_date"
 
   cp LICENSE THIRD_PARTY_NOTICES.md "$stage/"
+  set_tarball_mtimes "$source_epoch" \
+    "$stage/LICENSE" "$stage/THIRD_PARTY_NOTICES.md" "$stage/bible"
 
   tar \
-    --sort=name \
-    --mtime="@$source_epoch" \
     --owner=0 \
     --group=0 \
     --numeric-owner \
@@ -80,5 +97,5 @@ done
 
 (
   cd "$output"
-  sha256sum bible-cli_*.tar.gz >checksums.txt
+  sha256 bible-cli_*.tar.gz >checksums.txt
 )
