@@ -45,11 +45,14 @@ not update Homebrew.
 ## Verify
 
 1. Wait for the release workflow to complete successfully.
-2. Confirm the GitHub release contains four archives and `checksums.txt`.
+2. Confirm the GitHub release contains four archives, `checksums.txt`, and
+   `bible-cli.spdx.json`, and that build provenance was attested.
 3. Download the archive for the current machine and verify its checksum.
-4. Run `bible version` and confirm the version, commit, and build date.
-5. Run `bible read "John 3:16"` without network access.
-6. Confirm the tap formula references the new tag, then run
+4. Verify the archive's build provenance:
+   `gh attestation verify <archive> --repo vmrocha/bible-cli`.
+5. Run `bible version` and confirm the version, commit, and build date.
+6. Run `bible read "John 3:16"` without network access.
+7. Confirm the tap formula references the new tag, then run
    `brew update && brew upgrade bible-cli` and `brew test bible-cli`.
 
 Never move or reuse a published tag. If publishing fails after a release becomes

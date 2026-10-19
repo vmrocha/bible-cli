@@ -12,6 +12,10 @@ jobs:
   release:
     name: Build and publish release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
 
     steps:
       - name: Check out repository
@@ -52,6 +56,35 @@ jobs:
             --verify-tag \
             --notes-file "docs/releases/$GITHUB_REF_NAME.md" \
             --title "Bible CLI $GITHUB_REF_NAME"
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
+        with:
+          path: .
+          format: spdx-json
+          output-file: dist/bible-cli.spdx.json
+          upload-artifact: false
+          upload-release-assets: false
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            dist/bible-cli_*.tar.gz
+            dist/checksums.txt
+
+      - name: Attest SBOM
+        uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
+        with:
+          subject-path: |
+            dist/bible-cli_*.tar.gz
+            dist/checksums.txt
+          sbom-path: dist/bible-cli.spdx.json
+
+      - name: Upload SBOM to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" dist/bible-cli.spdx.json --clobber
 
       - name: Check Homebrew tap credentials
         if: ${{ !contains(github.ref_name, '-') }}

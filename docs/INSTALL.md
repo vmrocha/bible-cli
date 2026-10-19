@@ -45,6 +45,14 @@ install -m 0755 bible ~/.local/bin/bible
 On Linux, use `sha256sum --check -` in place of the `shasum` verification
 command.
 
+Each release asset also has a signed build-provenance attestation (SLSA) and an
+SPDX software bill of materials. With the GitHub CLI, verify that an archive was
+built by this repository's release workflow:
+
+```console
+gh attestation verify bible-cli_0.1.0_darwin_arm64.tar.gz --repo vmrocha/bible-cli
+```
+
 Ensure `~/.local/bin` is on your `PATH`, then verify the embedded release
 metadata and read a verse:
 
