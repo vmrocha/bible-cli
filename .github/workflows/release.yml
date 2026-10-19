@@ -86,36 +86,41 @@ jobs:
           VERSION: ${{ github.ref_name }}
           COMMIT: ${{ github.sha }}
         run: |
-          set -euo pipefail
-          build_date=$(git show -s --format=%cI "$COMMIT")
+          set -uo pipefail
+          if ! (
+            set -euo pipefail
+            build_date=$(git show -s --format=%cI "$COMMIT")
 
-          tap=$(mktemp -d)
-          git -c http.extraheader="AUTHORIZATION: bearer ${HOMEBREW_TAP_TOKEN}" \
-            clone --quiet --depth 1 \
-            https://github.com/vmrocha/homebrew-tap.git "$tap"
+            tap=$(mktemp -d)
+            git -c http.extraheader="AUTHORIZATION: bearer ${HOMEBREW_TAP_TOKEN}" \
+              clone --quiet --depth 1 \
+              https://github.com/vmrocha/homebrew-tap.git "$tap"
 
-          formula="$tap/Formula/bible-cli.rb"
-          if ! grep -q 'buildinfo.commit=' "$formula"; then
-            echo "::warning::formula declares no commit ldflag; skipping metadata embed"
-            exit 0
+            formula="$tap/Formula/bible-cli.rb"
+            if ! grep -q 'buildinfo.commit=' "$formula"; then
+              echo "formula declares no commit ldflag; nothing to embed"
+              exit 0
+            fi
+
+            sed -i \
+              -e "s|buildinfo.commit=[^ ]*|buildinfo.commit=${COMMIT}|" \
+              -e "s|buildinfo.date=[^ ]*|buildinfo.date=${build_date}|" \
+              "$formula"
+
+            cd "$tap"
+            if git diff --quiet; then
+              echo "Tap formula already carries the release metadata."
+              exit 0
+            fi
+
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit --quiet -am "bible-cli ${VERSION}: embed commit and build date"
+            git -c http.extraheader="AUTHORIZATION: bearer ${HOMEBREW_TAP_TOKEN}" \
+              push --quiet origin HEAD:main
+          ); then
+            echo "::warning::could not embed build metadata in the tap formula; brew builds will report unknown commit/date"
           fi
-
-          sed -i \
-            -e "s|buildinfo.commit=[^ ]*|buildinfo.commit=${COMMIT}|" \
-            -e "s|buildinfo.date=[^ ]*|buildinfo.date=${build_date}|" \
-            "$formula"
-
-          cd "$tap"
-          if git diff --quiet; then
-            echo "Tap formula already carries the release metadata."
-            exit 0
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit --quiet -am "bible-cli ${VERSION}: embed commit and build date"
-          git -c http.extraheader="AUTHORIZATION: bearer ${HOMEBREW_TAP_TOKEN}" \
-            push --quiet origin HEAD:main
 
       - name: Report missing Homebrew tap credentials
         if: ${{ steps.homebrew-token.outputs.available == 'false' }}
