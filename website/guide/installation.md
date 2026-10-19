@@ -22,7 +22,8 @@ Homebrew also installs Bash, Zsh, and Fish completions. Use
    on your `PATH`.
 
 See the repository's [full installation guide](https://github.com/vmrocha/bible-cli/blob/main/docs/INSTALL.md)
-for platform-specific commands, source builds, and checksum verification.
+for platform-specific commands, source builds, checksum verification, and
+build-provenance (SLSA) verification.
 
 ## Confirm the installation
 
