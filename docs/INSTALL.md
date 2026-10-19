@@ -28,7 +28,7 @@ Tagged releases provide single-binary archives for:
 
 Download the archive for your platform and `checksums.txt` from the matching
 [GitHub release](https://github.com/vmrocha/bible-cli/releases). For
-example, once the repository is public, download version `0.1.0` for an Apple
+example, download version `0.1.0` for an Apple
 silicon Mac without a GitHub account or GitHub CLI:
 
 ```console

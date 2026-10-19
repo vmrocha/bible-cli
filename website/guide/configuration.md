@@ -3,9 +3,9 @@
 Bible CLI stores persistent display and translation preferences in a
 versioned JSON file. On macOS and Linux, it resolves the path in this order:
 
-1. `$BIBLE_TERMINAL_CONFIG_HOME/config.json`
-2. `$XDG_CONFIG_HOME/bible-terminal/config.json`
-3. `~/.config/bible-terminal/config.json`
+1. `$BIBLE_CLI_CONFIG_HOME/config.json`
+2. `$XDG_CONFIG_HOME/bible-cli/config.json`
+3. `~/.config/bible-cli/config.json`
 
 The first two environment variables must be absolute paths.
 
